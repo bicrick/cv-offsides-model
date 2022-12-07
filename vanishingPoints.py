@@ -76,7 +76,8 @@ def get_vertical_lines(image, side):
                 rlimit = 100
         else:
             linesFound = True
-
+    
+    cv2.namedWindow("Model Image V", cv2.WINDOW_NORMAL) 
     cv2.imshow("Model Image V", image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
@@ -130,7 +131,7 @@ def get_horizontal_lines(image):
                     if isLineValid:
                         finalLines.append([[x1, y1], [x2, y2]])
                         finalLinesParameters.append([r, theta])
-                        # cv2.line(image,(x1,y1), (x2,y2), (0,0,255),1)
+                        cv2.line(image,(x1,y1), (x2,y2), (0,0,255),1)
         if len(finalLines) < 2:
             if rLimit >= 75:
                 rLimit -= 10
@@ -140,6 +141,11 @@ def get_horizontal_lines(image):
         else:
             linesFound = True
 
+
+    cv2.namedWindow("Model Image H", cv2.WINDOW_NORMAL) 
+    cv2.imshow("Model Image H", image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
     return finalLines
 
 
@@ -321,14 +327,3 @@ def project_point_on_plane(plane, point, pose, ratio, image):
     y_new = y1 + perpendicular_dist
 
     return [int(y_new), int(point[0])]
-
-
-if __name__ == "__main__":
-    # Direction of goal
-    goalDirection = 'right'
-
-    imageForVanishingPoints = cv2.imread("/Users/alexalzaga/Documents/UNI/COMPUTER VISION/FinalProject/images/OG.jpeg")
-    vertical_vanishing_point = get_vanishing_point_v(imageForVanishingPoints, goalDirection)
-    horizontal_vanishing_point = get_vanishing_point_h(imageForVanishingPoints)
-    # cv2.imwrite(vanishing_point_viz_base_path+tempFileNames[file_itr], imageForVanishingPoints)
-    print('Finished Vanishing Point calculation')
