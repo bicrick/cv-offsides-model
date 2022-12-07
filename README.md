@@ -3,6 +3,4 @@ This is a final project for EE379K, Computer Vision class. We are building a com
 
 Please add the Dataset to the root folder.
 Dataset should be structured like this.
-  Dataset/
-        Offside_Images/
-        final_data.json
+  Dataset/Offside_Images
