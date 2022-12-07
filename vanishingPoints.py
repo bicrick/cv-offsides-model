@@ -15,7 +15,7 @@ def get_vertical_lines(image, side):
         ## mask of green (36,0,0) ~ (70, 255,255)
         mask_g = cv2.inRange(hsv_img, (36, 100, 100), (70, 255, 255))
         target = cv2.bitwise_and(img_v, img_v, mask=mask_g)
-        cv2.imwrite('masked.jpg', target)
+        #cv2.imwrite('masked.jpg', target)
         edges = cv2.Canny(target, 155, 250, apertureSize=3)
         lines = cv2.HoughLines(edges, 1, np.pi / 180, 190)
         if lines.any():
