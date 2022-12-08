@@ -25,3 +25,9 @@ pip install -r requirements.txt
 To freeze your current packages, use:
 
 pip freeze -l > requirements.txt
+
+To run the playerDetection module, please download the yolov3.weights pre-trained model from:
+
+https://pjreddie.com/media/files/yolov3.weights
+
+Place this file in the yolo_cnn folder.
