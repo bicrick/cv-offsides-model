@@ -6,9 +6,18 @@ Dataset should be structured like this.
     
 Dataset/Offside_Images
 
-To run this -> Please download the required packages using pip
+To run, please move into the virtual environment.
 
-cv2
-numpy
+On MacOS:
+source ./venv/Scripts/activate
 
-Eventually we will get a CONDA environment working.
+On Windows/Linux
+./venv/Scripts/activate
+
+If it is your first time entering the virtual environment, you will need to install the required pip packages. To install all the packages, run:
+
+pip install -r requirements.txt
+
+To freeze your current packages, use:
+
+pip freeze -l > requirements.txt
