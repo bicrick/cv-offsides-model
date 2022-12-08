@@ -6,7 +6,11 @@ Dataset should be structured like this.
     
 Dataset/Offside_Images
 
-To run, please move into the virtual environment.
+To run, please create a virtual environment to store all of the python packages.
+
+python -m venv venv
+
+To enter the virtual environment, run
 
 On MacOS:
 source ./venv/Scripts/activate
