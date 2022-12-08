@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import csv
 from PIL import Image
 
-def get_field_positions(im):
+def get_field_positions(root,im):
     """Identify peoples (players and people standing by) in the image
     and write their positions to a csv file. 
     Also, save the image with the identified people highlighted.
@@ -19,7 +19,7 @@ def get_field_positions(im):
         im (path): path to the image
     
     """
-    img = plt.imread(im)
+    img = plt.imread(root+str(im)+'.jpg')
     classes = None 
     
     # read coco class names
@@ -89,12 +89,12 @@ def get_field_positions(im):
     # remove axis
     ax1.axis('off')
     ax1.imshow(img)
-    plt.savefig('Output/0Box.jpg', bbox_inches='tight')
+    plt.savefig('Output/'+str(im)+'Box.jpg', bbox_inches='tight')
     plt.title("detection")
     
     # save coordinte of players
-    with open('Output/0Coords.csv', 'w',newline='') as outfile:
+    with open('Output/'+str(im)+'Coords.csv', 'w',newline='') as outfile:
         writer = csv.writer(outfile)
         writer.writerows(u_im)
 
-get_field_positions('Dataset/Offside_Images/0.jpg')
+    return img

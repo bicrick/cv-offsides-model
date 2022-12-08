@@ -6,12 +6,13 @@ import sys
 import os
 import warnings
 from vanishingPoints import *
+from playerDetection import get_field_positions
 
 #Goal Direction
 goalDirection = 'right'
 
 #Dataset Path
-dataset_path = '\CV_Offsides_Model\Dataset\Offside_Images'
+dataset_path = '\Dataset\Offside_Images'
 cur_path = os.getcwd()
 fileNames = []
 tempFileNames = os.listdir(cur_path+dataset_path)
@@ -29,14 +30,11 @@ print('Starting Vanishing Point calculation')
 vertical_vanishing_point = get_vanishing_point_v(imageForVanishingPoints, goalDirection)
 horizontal_vanishing_point = get_vanishing_point_h(imageForVanishingPoints)
 # cv2.imwrite(vanishing_point_viz_base_path+tempFileNames[file_itr], imageForVanishingPoints)
-cv2.namedWindow("Vanishing Points", cv2.WINDOW_NORMAL) 
-cv2.imshow("Vanishing Points", imageForVanishingPoints)
+# cv2.namedWindow("Vanishing Points", cv2.WINDOW_NORMAL) 
+# cv2.imshow("Vanishing Points", imageForVanishingPoints)
 print('Finished Vanishing Point calculation')
 
-# print('Starting Pose Detection')
-# imageForPoseDetection_T1 = cv2.imread(cur_path+dataset_path+"/0.jpg")
-# imageForPoseDetection_T2 = cv2.imread(cur_path+dataset_path+"/0.jpg")
-#
-
-# cv2.namedWindow("Pose Estimations", cv2.WINDOW_NORMAL) 
-# cv2.imshow("Pose Estimations", imageForPoseDetection)
+print('Starting Player Detection')
+playerDetectionImg = get_field_positions('Dataset/Offside_Images/',0)
+cv2.imshow("Player Detection",playerDetectionImg)
+print('Ending Player Detection')
