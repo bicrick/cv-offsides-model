@@ -1,3 +1,4 @@
 Dataset/*
 __pycache__/*
 venv/*
+yolo_cnn/yolov3.weights
