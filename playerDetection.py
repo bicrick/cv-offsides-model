@@ -28,7 +28,7 @@ def get_field_positions(root,im):
     # Select image or mask according to condition array
     pixels=np.where(cond, img, npMask)
     result=Image.fromarray(pixels)
-    result.save('result.png')
+    #result.save('result.png')
     img = np.array(result)
 
     classes = None 
@@ -138,7 +138,7 @@ def get_field_positions(root,im):
     plt.savefig('Output/'+str(im)+'Box.jpg', bbox_inches='tight')
     plt.title("detection")
 
-    return red_pos,white_pos
+    return red_pos,white_pos,img_final
 
 def get_cropped_image(img,box:list) -> list:
     crop=img[round(box[1]):round(box[1]+box[3]),round(box[0]):round(box[0]+box[2])] 
