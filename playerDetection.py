@@ -117,11 +117,11 @@ def get_field_positions(root,im,goalDirection):
                     if goalDirection== 'left':
                         bottom_left_corner=(round(box[0]),round(box[1]+box[3]))
                         red_pos.append(bottom_left_corner)
-                        cv2.circle(img_final,bottom_left_corner,radius=2,color=(0,0,0),thickness=3)
+                        #cv2.circle(img_final,bottom_left_corner,radius=2,color=(0,0,0),thickness=3)
                     else:
                         bottom_right_corner=(round(box[0]+box[2]),round(box[1]+box[3]))
                         red_pos.append(bottom_right_corner)
-                        cv2.circle(img_final,bottom_right_corner,radius=2,color=(0,0,0),thickness=3)
+                        #cv2.circle(img_final,bottom_right_corner,radius=2,color=(0,0,0),thickness=3)
                 else:
                     #Draw White Box
                     label = str(f"player{white_number}")
@@ -133,11 +133,11 @@ def get_field_positions(root,im,goalDirection):
                     if goalDirection== 'left':
                         bottom_left_corner=(round(box[0]),round(box[1]+box[3]))
                         white_pos.append(bottom_left_corner)
-                        cv2.circle(img_final,bottom_left_corner,radius=2,color=(0,0,0),thickness=3)
+                        #cv2.circle(img_final,bottom_left_corner,radius=2,color=(0,0,0),thickness=3)
                     else:
                         bottom_right_corner=(round(box[0]+box[2]),round(box[1]+box[3]))
                         white_pos.append(bottom_right_corner)
-                        cv2.circle(img_final,bottom_right_corner,radius=2,color=(0,0,0),thickness=3)
+                        #cv2.circle(img_final,bottom_right_corner,radius=2,color=(0,0,0),thickness=3)
             
     # save image with identified people highlighted
     fig = plt.figure(figsize=(20,10))
@@ -174,13 +174,13 @@ def get_red_mask(cropped_img):
     return result
 
 def get_white_mask(cropped_img):
-    cropped_img = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2HSV)
-    # white mask, used for 0.jpg, 24.jpg
-    #lower = np.array([0, 0, 231])
-    #upper = np.array([180, 18, 255])
-    # blue mask, used for 479.jpg
-    lower = np.array([90, 50, 70])
-    upper = np.array([128, 255, 255])
+    # # blue mask, used for 479.jpg -> Must change to HSV
+    # cropped_img = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2HSV)
+    # lower = np.array([90, 50, 70])
+    # upper = np.array([128, 255, 255])
+
+    lower = np.array([200, 200, 200])
+    upper = np.array([255, 255, 255])
     mask = cv2.inRange(cropped_img,lower,upper)
     result = cv2.bitwise_and(cropped_img,cropped_img,mask=mask)
     return result

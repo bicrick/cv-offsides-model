@@ -9,18 +9,16 @@ from vanishingPoints import *
 from playerDetection import get_field_positions
 from offsidesCalculation import *
 
-#Goal Direction
+#CONFIG
 goalDirection = 'right'
+curImage = 213
 
 #Dataset Path
 dataset_path = '\Dataset\Offside_Images'
 cur_path = os.getcwd()
-fileNames = []
-tempFileNames = os.listdir(cur_path+dataset_path)
-for fileName in tempFileNames:
-    fileNames.append(cur_path+dataset_path+str(fileName))
 
-initial_image = cv2.imread(cur_path+dataset_path+"/479.jpg")
+
+initial_image = cv2.imread(cur_path+dataset_path+"/"+str(curImage)+".jpg")
 
 imageForVanishingPoints = initial_image.copy()
 
@@ -31,15 +29,13 @@ print(horizontal_vanishing_point)
 print('Finished Vanishing Point calculation')
 
 print('Starting Player Detection and Classification')
-red_pos,white_pos,img_final = get_field_positions('Dataset/Offside_Images/',479,goalDirection)
+red_pos,white_pos,img_final = get_field_positions('Dataset/Offside_Images/',curImage,goalDirection)
 #https://towardsdatascience.com/football-players-tracking-identifying-players-team-based-on-their-jersey-colors-using-opencv-7eed1b8a1095
 print('Ending Player Detection')
 
 print('Beginning Offsides Calculations')
-drawLines(red_pos,white_pos,vertical_vanishing_point,img_final)
-    #Connect Points to Vanishing Lines
-    #Find the defender closest to the goal(white)
-    #Find the attacker closest to the goal(red)
-#Draw offside line
+#linesImg = drawLines(red_pos,white_pos,vertical_vanishing_point,img_final)
+final = determineOffsides(red_pos,white_pos,vertical_vanishing_point,img_final,goalDirection)
+cv2.imwrite('Output/'+str(curImage)+'Final.jpg',final)
 print('Ending Ofssides Calculation')
 print('Finished')
