@@ -1,8 +1,3 @@
-"""
-identify players in the image .
-author:Hamza Oukaddi
-"""
-
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,18 +5,11 @@ import csv
 from PIL import Image
 
 def get_field_positions(root,im):
-    """Identify peoples (players and people standing by) in the image
-    and write their positions to a csv file. 
-    Also, save the image with the identified people highlighted.
     
-
-    Args:
-        im (path): path to the image
-    
-    """
     img = plt.imread(root+str(im)+'.jpg')
     # copy of OG image to show boxes
-    img_final = img
+    img_final = img.copy()
+    img_unaltered = cv2.imread(root+str(im)+'.jpg')
 
     hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     ## mask of green (36,0,0) ~ (70, 255,255)
@@ -90,21 +78,56 @@ def get_field_positions(root,im):
                 
     indices = cv2.dnn.NMSBoxes(boxes, confidences, 0.1, 0.1)
     
+
     #check if is people detection
-    player_number=0
-    u_im=[] # player postion
+    white_number=0
+    red_number=0
+    red_pos=[]
+    white_pos=[]
     boxes_player=[]
     for i in indices:
         box = boxes[i]
         if class_ids[i]==0:
             boxes_player.append(box)
+            masked_outputs=[]
+            cropped_img = get_cropped_image(img_unaltered,box)
 
-            label = str(f"player{player_number}") 
-            player_number +=1
-            cv2.rectangle(img_final, (round(box[0]),round(box[1])), (round(box[0]+box[2]),round(box[1]+box[3])), (0, 0, 0), 2)
-            cv2.putText(img_final, label, (round(box[0])-10,round(box[1])-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
-            bottom_right_corner=(round(box[0]+box[2]),round(box[1]+box[3]))
-            u_im.append(bottom_right_corner)
+            red = get_red_mask(cropped_img)
+            white = get_white_mask(cropped_img)
+
+            redCountGray = cv2.cvtColor(red, cv2.COLOR_BGR2GRAY)
+            whiteCountGray = cv2.cvtColor(white, cv2.COLOR_BGR2GRAY)
+
+            redCount = cv2.countNonZero(redCountGray)
+            whiteCount = cv2.countNonZero(whiteCountGray)
+            
+
+            #print(str(player_number)+' : '+ str(redCount))
+            #print(str(player_number)+' : '+ str(whiteCount))
+
+            if(redCount+whiteCount>400):
+                if(redCount>whiteCount):
+                    #Draw Red 
+                    label = str(f"player{red_number}")
+                    cv2.rectangle(img_final, (round(box[0]),round(box[1])), (round(box[0]+box[2]),round(box[1]+box[3])), (255, 0, 0), 2)
+                    cv2.putText(img_final, label, (round(box[0])-10,round(box[1])-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+                    #Increment Red Defenders
+                    red_number+=1
+
+                    bottom_left_corner=(round(box[0]),round(box[1]+box[3]))
+                    red_pos.append(bottom_left_corner)
+                    cv2.circle(img_final,bottom_left_corner,radius=2,color=(0,0,0),thickness=3)
+                else:
+                    #Draw White Box
+                    label = str(f"player{white_number}")
+                    cv2.rectangle(img_final, (round(box[0]),round(box[1])), (round(box[0]+box[2]),round(box[1]+box[3])), (255, 255, 255), 2)
+                    cv2.putText(img_final, label, (round(box[0])-10,round(box[1])-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                    #Increment White Defenders
+                    white_number+=1
+
+                    bottom_left_corner=(round(box[0]),round(box[1]+box[3]))
+                    white_pos.append(bottom_left_corner)
+                    cv2.circle(img_final,bottom_left_corner,radius=2,color=(0,0,0),thickness=3)
             
     # save image with identified people highlighted
     fig = plt.figure(figsize=(20,10))
@@ -114,10 +137,35 @@ def get_field_positions(root,im):
     ax1.imshow(img_final)
     plt.savefig('Output/'+str(im)+'Box.jpg', bbox_inches='tight')
     plt.title("detection")
-    
-    # save coordinte of players
-    with open('Output/'+str(im)+'Coords.csv', 'w',newline='') as outfile:
-        writer = csv.writer(outfile)
-        writer.writerows(u_im)
 
-    return img
+    return red_pos,white_pos
+
+def get_cropped_image(img,box:list) -> list:
+    crop=img[round(box[1]):round(box[1]+box[3]),round(box[0]):round(box[0]+box[2])] 
+    return crop
+
+def get_red_mask(cropped_img):
+    cropped_img = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2HSV)
+
+    # lower boundary RED color range values; Hue (0 - 10)
+    lower1 = np.array([0, 50, 50])
+    upper1 = np.array([10, 255, 255])
+    
+    # upper boundary RED color range values; Hue (160 - 180)
+    lower2 = np.array([170,50,50])
+    upper2 = np.array([180,255,255])
+
+    lower_mask = cv2.inRange(cropped_img, lower1, upper1)
+    upper_mask = cv2.inRange(cropped_img, lower2, upper2)
+
+    full_mask = lower_mask + upper_mask
+
+    result = cv2.bitwise_and(cropped_img, cropped_img, mask=full_mask)
+    return result
+
+def get_white_mask(cropped_img):
+    lower = np.array([245, 245, 245])
+    upper = np.array([255, 255, 255])
+    mask = cv2.inRange(cropped_img,lower,upper)
+    result = cv2.bitwise_and(cropped_img,cropped_img,mask=mask)
+    return result
