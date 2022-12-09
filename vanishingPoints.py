@@ -77,10 +77,10 @@ def get_vertical_lines(image, side):
         else:
             linesFound = True
     
-    cv2.namedWindow("Model Image V", cv2.WINDOW_NORMAL) 
-    cv2.imshow("Model Image V", image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.namedWindow("Model Image V", cv2.WINDOW_NORMAL) 
+    #cv2.imshow("Model Image V", image)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
     return finalLines
 
 
@@ -142,10 +142,10 @@ def get_horizontal_lines(image):
             linesFound = True
 
 
-    cv2.namedWindow("Model Image H", cv2.WINDOW_NORMAL) 
-    cv2.imshow("Model Image H", image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.namedWindow("Model Image H", cv2.WINDOW_NORMAL) 
+    #cv2.imshow("Model Image H", image)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
     return finalLines
 
 
