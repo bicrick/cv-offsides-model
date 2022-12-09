@@ -22,9 +22,9 @@ for fileName in tempFileNames:
 #keeper = [4.4931905696916325e-06, 4.450801979411523e-06, 5.510516736414265e-07, 0.00021567314734519837, 0.002188183807439825, 0.0015186984125557716, 0.7527352297592997, 1.0, 0.20787746170678337]
 #referee = [8.72783130847647e-06, 1.5868784197229944e-07, 0.0, 0.0010298840944002235, 0.0002880184331797235, 0.002688172043010753, 0.3064516129032258, 0.05913978494623656, 1.0]
 
-#BEGIN DEBUG SECTION FOR ONE IMAGE
-imageForVanishingPoints = cv2.imread(cur_path+dataset_path+"/0.jpg")
-#imageForVanishingPoints = cv2.imread("/Users/alexalzaga/Documents/UNI/COMPUTER VISION/FinalProject/images/OG.jpeg")
+    #BEGIN DEBUG SECTION FOR ONE IMAGE
+    imageForVanishingPoints = cv2.imread(cur_path+dataset_path+"/469.jpg")
+    #imageForVanishingPoints = cv2.imread("/Users/alexalzaga/Documents/UNI/COMPUTER VISION/FinalProject/images/OG.jpeg")
 
 print('Starting Vanishing Point calculation')
 vertical_vanishing_point = get_vanishing_point_v(imageForVanishingPoints, goalDirection)
@@ -34,7 +34,7 @@ horizontal_vanishing_point = get_vanishing_point_h(imageForVanishingPoints)
 # cv2.imshow("Vanishing Points", imageForVanishingPoints)
 print('Finished Vanishing Point calculation')
 
-print('Starting Player Detection')
-playerDetectionImg = get_field_positions('Dataset/Offside_Images/',0)
-cv2.imshow("Player Detection",playerDetectionImg)
-print('Ending Player Detection')
+    print('Starting Player Detection')
+    playerDetectionImg = get_field_positions('Dataset/Offside_Images/',469)
+    cv2.imshow("Player Detection",playerDetectionImg)
+    print('Ending Player Detection')

@@ -20,6 +20,29 @@ def get_field_positions(root,im):
     
     """
     img = plt.imread(root+str(im)+'.jpg')
+    # copy of OG image to show boxes
+    img_final = img
+
+    hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    ## mask of green (36,0,0) ~ (70, 255,255)
+    mask_g = cv2.inRange(hsv_img, (36, 100, 100), (86, 255, 255))
+    mask = np.invert(mask_g)
+    kernel = np.ones((50,50),np.uint8)
+    mask_crowd = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+    mask_crowd = np.invert(mask_crowd)
+
+    # Open the mask image as numpy array and convert to 3-channels
+    npMask=np.array(Image.fromarray(mask_crowd).convert("RGB"))
+
+    # Make a binary array identifying where the mask is white
+    cond = npMask>128
+
+    # Select image or mask according to condition array
+    pixels=np.where(cond, img, npMask)
+    result=Image.fromarray(pixels)
+    result.save('result.png')
+    img = np.array(result)
+
     classes = None 
     
     # read coco class names
@@ -78,8 +101,8 @@ def get_field_positions(root,im):
 
             label = str(f"player{player_number}") 
             player_number +=1
-            cv2.rectangle(img, (round(box[0]),round(box[1])), (round(box[0]+box[2]),round(box[1]+box[3])), (0, 0, 0), 2)
-            cv2.putText(img, label, (round(box[0])-10,round(box[1])-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+            cv2.rectangle(img_final, (round(box[0]),round(box[1])), (round(box[0]+box[2]),round(box[1]+box[3])), (0, 0, 0), 2)
+            cv2.putText(img_final, label, (round(box[0])-10,round(box[1])-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
             bottom_right_corner=(round(box[0]+box[2]),round(box[1]+box[3]))
             u_im.append(bottom_right_corner)
             
@@ -88,7 +111,7 @@ def get_field_positions(root,im):
     ax1 = fig.add_subplot(1,1,1)
     # remove axis
     ax1.axis('off')
-    ax1.imshow(img)
+    ax1.imshow(img_final)
     plt.savefig('Output/'+str(im)+'Box.jpg', bbox_inches='tight')
     plt.title("detection")
     
