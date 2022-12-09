@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import csv
 from PIL import Image
 
-def get_field_positions(root,im):
+def get_field_positions(root,im,goalDirection):
     
     img = plt.imread(root+str(im)+'.jpg')
     # copy of OG image to show boxes
@@ -114,9 +114,14 @@ def get_field_positions(root,im):
                     #Increment Red Defenders
                     red_number+=1
 
-                    bottom_left_corner=(round(box[0]),round(box[1]+box[3]))
-                    red_pos.append(bottom_left_corner)
-                    cv2.circle(img_final,bottom_left_corner,radius=2,color=(0,0,0),thickness=3)
+                    if goalDirection== 'left':
+                        bottom_left_corner=(round(box[0]),round(box[1]+box[3]))
+                        red_pos.append(bottom_left_corner)
+                        cv2.circle(img_final,bottom_left_corner,radius=2,color=(0,0,0),thickness=3)
+                    else:
+                        bottom_right_corner=(round(box[0]+box[2]),round(box[1]+box[3]))
+                        red_pos.append(bottom_right_corner)
+                        cv2.circle(img_final,bottom_right_corner,radius=2,color=(0,0,0),thickness=3)
                 else:
                     #Draw White Box
                     label = str(f"player{white_number}")
@@ -125,9 +130,14 @@ def get_field_positions(root,im):
                     #Increment White Defenders
                     white_number+=1
 
-                    bottom_left_corner=(round(box[0]),round(box[1]+box[3]))
-                    white_pos.append(bottom_left_corner)
-                    cv2.circle(img_final,bottom_left_corner,radius=2,color=(0,0,0),thickness=3)
+                    if goalDirection== 'left':
+                        bottom_left_corner=(round(box[0]),round(box[1]+box[3]))
+                        white_pos.append(bottom_left_corner)
+                        cv2.circle(img_final,bottom_left_corner,radius=2,color=(0,0,0),thickness=3)
+                    else:
+                        bottom_right_corner=(round(box[0]+box[2]),round(box[1]+box[3]))
+                        white_pos.append(bottom_right_corner)
+                        cv2.circle(img_final,bottom_right_corner,radius=2,color=(0,0,0),thickness=3)
             
     # save image with identified people highlighted
     fig = plt.figure(figsize=(20,10))
@@ -164,8 +174,13 @@ def get_red_mask(cropped_img):
     return result
 
 def get_white_mask(cropped_img):
-    lower = np.array([245, 245, 245])
-    upper = np.array([255, 255, 255])
+    cropped_img = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2HSV)
+    #white mask, used for 0.jpg, 24.jpg
+    #lower = np.array([245, 245, 245])
+    #upper = np.array([255, 255, 255])
+    #blue mask, used for 479.jpg
+    lower = np.array([60, 40, 40])
+    upper = np.array([130, 255, 255])
     mask = cv2.inRange(cropped_img,lower,upper)
     result = cv2.bitwise_and(cropped_img,cropped_img,mask=mask)
     return result
