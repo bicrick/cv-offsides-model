@@ -31,4 +31,4 @@ To run the playerDetection module, please download the yolov3.weights pre-traine
 https://pjreddie.com/media/files/yolov3.weights
 
 Place this file in the yolo_cnn folder. Configure the application at the top of main.py. To run, enter the goalDirection and the pictureid from the dataset.
-Run main.py. Please note, you may have to change the team designated on offense/defense offsidesCalculation.py
+Run main.py. Please note, you may have to change the team designated on offense/defense offsidesCalculation.py.

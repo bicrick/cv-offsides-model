@@ -8,9 +8,9 @@ def drawLines(red_pos,white_pos,vp,img):
     x = int(np.round(vp[0]))
     y = int(np.round(vp[1]))
     for pos in red_pos:
-        cv2.line(img,pos,(x,y),(0,0,255),1)
+        cv2.line(img,pos,(x,y),(0,0,255),2)
     for pos in white_pos:
-        cv2.line(img,pos,(x,y),(255,255,255),1)
+        cv2.line(img,pos,(x,y),(255,255,255),2)
     return img
 
 def determineOffsides(red_pos,white_pos,vp,img,goalDirection):
@@ -22,18 +22,18 @@ def determineOffsides(red_pos,white_pos,vp,img,goalDirection):
     attackColor = []
     defendColor = []
     
-    # #Attack White, Defend Red
-    # defendColor = (0,0,255)
-    # attackColor = (255,255,255)
-    # defender = red_pos
-    # attacker = white_pos
+    #Attack White, Defend Red
+    defendColor = (0,0,255)
+    attackColor = (255,255,255)
+    defender = red_pos
+    attacker = white_pos
 
 
-    #Attack Red, Defend White
-    defendColor = (255,255,255)
-    attackColor = (0,0,255)
-    defender = white_pos
-    attacker = red_pos
+    # #Attack Red, Defend White
+    # defendColor = (255,255,255)
+    # attackColor = (0,0,255)
+    # defender = white_pos
+    # attacker = red_pos
 
     attackerAnglePos = []
     defenderAnglePos=[]
@@ -58,10 +58,10 @@ def determineOffsides(red_pos,white_pos,vp,img,goalDirection):
 
     if(lastAttacker['angle']<lastDefender['angle']):
         print('------------------Offsides Detected!-------------------')
-        cv2.putText(img,"OFF",(lastAttacker['pos'][0],lastAttacker['pos'][1]+15),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,255,255),2)
+        cv2.putText(img,"OFF",(lastAttacker['pos'][0]-20,lastAttacker['pos'][1]+100),cv2.FONT_HERSHEY_SIMPLEX,4,(0,255,255),5)
     else:
         print('-----------------No Offsides Detected!-----------------')
-        cv2.putText(img,"ON",(lastAttacker['pos'][0],lastAttacker['pos'][1]+15),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,255,255),2)
+        cv2.putText(img,"ON",(lastAttacker['pos'][0]-20,lastAttacker['pos'][1]+100),cv2.FONT_HERSHEY_SIMPLEX,4,(0,255,255),5)
     
     return img
 
@@ -88,4 +88,4 @@ def calc_angle(vp,pos,goalDirection):
 def drawLine(pos,vp,img,color):
     x = int(np.round(vp[0]))
     y = int(np.round(vp[1]))
-    cv2.line(img,pos,(x,y),color,1)
+    cv2.line(img,pos,(x,y),color,2)

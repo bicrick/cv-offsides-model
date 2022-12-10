@@ -31,6 +31,9 @@ def get_field_positions(root,im,goalDirection):
     #result.save('result.png')
     img = np.array(result)
 
+    #rgbimg = cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
+    #cv2.imwrite('PlayerDetectionMasked.jpg', rgbimg)
+
     classes = None 
     
     # read coco class names
@@ -47,7 +50,7 @@ def get_field_positions(root,im,goalDirection):
     # create input blob 
     # set input blob for the network
     net.setInput(cv2.dnn.blobFromImage(img, 0.00392, (416,416), (0,0,0), True, crop=False))
-
+    
     # run inference through the network
     # and gather predictions from output layers
 
@@ -91,9 +94,14 @@ def get_field_positions(root,im,goalDirection):
             boxes_player.append(box)
             masked_outputs=[]
             cropped_img = get_cropped_image(img_unaltered,box)
+            
+            #cv2.imwrite('masked_output/'+str(i)+'imcropped.jpg',cropped_img)
 
             red = get_red_mask(cropped_img)
+            #cv2.imwrite('masked_output/'+str(i)+'imcroppedred.jpg',red)
+
             white = get_white_mask(cropped_img)
+            #cv2.imwrite('masked_output/'+str(i)+'imcroppedwhite.jpg',white)
 
             redCountGray = cv2.cvtColor(red, cv2.COLOR_BGR2GRAY)
             whiteCountGray = cv2.cvtColor(white, cv2.COLOR_BGR2GRAY)
@@ -174,13 +182,18 @@ def get_red_mask(cropped_img):
     return result
 
 def get_white_mask(cropped_img):
-    # # blue mask, used for 479.jpg -> Must change to HSV
-    # cropped_img = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2HSV)
-    # lower = np.array([90, 50, 70])
-    # upper = np.array([128, 255, 255])
-
     lower = np.array([200, 200, 200])
     upper = np.array([255, 255, 255])
+    mask = cv2.inRange(cropped_img,lower,upper)
+    result = cv2.bitwise_and(cropped_img,cropped_img,mask=mask)
+    return result
+
+def get_misc_mask(cropped_img):
+    # # blue mask, used for 479.jpg
+    cropped_img = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2HSV)
+    lower = np.array([90, 50, 70])
+    upper = np.array([128, 255, 255])
+
     mask = cv2.inRange(cropped_img,lower,upper)
     result = cv2.bitwise_and(cropped_img,cropped_img,mask=mask)
     return result
