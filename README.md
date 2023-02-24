@@ -1,4 +1,5 @@
 # CV_Offsides_Model
+http://dx.doi.org/10.13140/RG.2.2.26183.16801
 This is a final project for EE379K, Computer Vision class. We are building a computer vision model in python that can detect when someone is offsides in soccer from a still of the game.
 
 Please add the Dataset to the root folder.
